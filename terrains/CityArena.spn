@@ -1,0 +1,80 @@
+
+para = {}
+
+
+
+include( 'cl_scoreboard.lua' )
+include( 'cl_targetid.lua' )
+include('shared.lua')
+	
+function para.ReceiveMsg(um)
+	local string = um:ReadString()
+	if string == "para.timer" then
+		para.timer = um:ReadFloat()
+	end
+	if string == "para.message" then
+		para.message = um:ReadFloat()
+	end
+	if string == "para.type" then
+		para.type = um:ReadFloat()
+	end
+	if string == "para.poids" then
+		para.poids = um:ReadFloat()
+	end
+	if string == "para.mt" then
+		para.mt = um:ReadFloat()
+	end
+
+	
+end
+usermessage.Hook("para.SendMsg",para.ReceiveMsg)
+
+--type : 0 : human , 1 : alien & spawn , 2 : human robot , 3 : alien robot # clientside only #
+para.type = 0
+para.poids = 0
+para.timer = -1
+para.message = "0"
+missiont = -1
+para.mt = -1
+
+local pmeta = FindMetaTable("Player");
+
+usermessage.Hook("ArmorUpdate", function(um)
+	LocalPlayer().umsgArmor = um:ReadLong();
+end);
+
+function pmeta:Armor()
+	if !self.umsgArmor then return 0 end
+	return self.umsgArmor;
+end
+
+function GM:HUDShouldDraw(name)
+	self.BaseClass:HUDShouldDraw(name);
+	if name == "CHudHealth" then return false end
+	if name == "CHudBattery" then return false end
+	if name == "CHudAmmo" then return false end
+	if name == "CHudSecondaryAmmo" then return false end
+	return true;
+end
+
+function CustomHUD()
+
+
+      local user = LocalPlayer()
+      local stmid = LocalPlayer():UserID( )
+    
+	  local poids = para.poids
+	  
+ if (poids > 255) then
+poids = 255
+end
+miss = LocalPlayer():GetNetworkedString( "mission")
+if mission != miss  then
+
+
+
+mission = miss
+
+
+end
+    if !user:Alive
